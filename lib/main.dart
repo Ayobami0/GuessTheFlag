@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:guess_the_flag/widgets/quiz.dart';
+import './pages/start.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       home: Scaffold(
           body: SafeArea(
-          child: QuizData(),
+          child: Home(),
           ),
       ),
     );

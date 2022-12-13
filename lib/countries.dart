@@ -14,7 +14,3 @@ Future getCountry() async {
   List getList(int n, List source) => source.sample(n);
   return getList(4, jsonResponse);
 } 
-
-void main() async {
-  print(await getCountry());
-}
