@@ -3,6 +3,7 @@ import '../countries.dart';
 import '../random.dart';
 import '../widgets/loading.dart';
 import '../widgets/error.dart';
+import '../pages/end.dart';
 
 class QuizData extends StatefulWidget {
   const QuizData({super.key});
@@ -27,8 +28,19 @@ class _QuizDataState extends State<QuizData> {
               print("wrong");
           }
         } else{
-          print(_scoreCount);
+        Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: ((context) => const FinishPage())));
+          _resetQuiz();
         }
+      });
+    }
+
+  void _resetQuiz() {
+      setState(() {
+        _scoreCount = 0;
+        _quizCount = 1;
       });
     }
 
