@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:guess_the_flag/pages/start.dart';
+import 'package:guess_the_flag/widgets/quiz.dart';
 
 class FinishPage extends StatelessWidget {
-  const FinishPage({super.key});
+
+  final int userScore;
+  final int totalScore;
+
+  const FinishPage({super.key, required this.totalScore, required this.userScore});
+
+  static const IconData refresh = IconData(0xe514, fontFamily: 'MaterialIcons');
 
   @override
   Widget build(BuildContext context) {
@@ -10,25 +18,29 @@ class FinishPage extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 90), 
-              const Text('You scored 10/24'),
-              const Text(
-                'Would You like to play again',
-                style: TextStyle(
-                  fontSize: 40,
-                ),
-              ),
+              Text('You scored $userScore/$totalScore'),
               const SizedBox(height: 90), 
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   IconButton(
-                    onPressed: () {}, 
-                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(
+                          builder: ((context) => Home())));
+                      }, 
+                    icon: const Icon(Icons.home),
                     iconSize: 40,
                   ),
                   IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.done),
+                      onPressed: (){
+                          Navigator.push(
+                            context, 
+                            MaterialPageRoute(
+                              builder: ((context) => const QuizData())));
+                        },
+                    icon: const Icon(refresh),
                     iconSize: 40,
                   )
                 ],

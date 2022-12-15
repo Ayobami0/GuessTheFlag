@@ -31,8 +31,7 @@ class _QuizDataState extends State<QuizData> {
         Navigator.push(
           context, 
           MaterialPageRoute(
-            builder: ((context) => const FinishPage())));
-          _resetQuiz();
+            builder: ((context) => FinishPage(userScore: _scoreCount, totalScore: _quizNumber,))));
         }
       });
     }

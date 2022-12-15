@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       home: Scaffold(
           body: SafeArea(
-          child: FinishPage(),
+          child: Home(),
           ),
       ),
     );
