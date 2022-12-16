@@ -28,10 +28,12 @@ class _QuizDataState extends State<QuizData> {
               print("wrong");
           }
         } else{
-        Navigator.push(
-          context, 
-          MaterialPageRoute(
-            builder: ((context) => FinishPage(userScore: _scoreCount, totalScore: _quizNumber,))));
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: ((context) => FinishPage(userScore: _scoreCount, totalScore: _quizNumber,))));
+          Navigator.pop(context);
+          _resetQuiz();
         }
       });
     }
