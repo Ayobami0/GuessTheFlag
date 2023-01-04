@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import '../countries.dart';
 import '../random.dart';
 import '../widgets/loading.dart';
@@ -13,44 +14,59 @@ class QuizData extends StatefulWidget {
 }
 
 class _QuizDataState extends State<QuizData> {
-  int _quizCount = 1;
-  int _scoreCount = 0;
-  final int _quizNumber = 10;
+  late int _quizCount;
+  late int _scoreCount;
+  final int _quizNumber = 2;
+  late int _finalScore;
+  late final Future myFuture;
   
-  void _nextQuiz(flag, country){
-      setState(() {
-        if (_quizCount != _quizNumber) {
-          _quizCount++;
-          if (flag == country){
-              print("correct");
-              _scoreCount++;
-          }else{
-              print("wrong");
-          }
-        } else{
-          Navigator.push(
-            context, 
-            MaterialPageRoute(
-              builder: ((context) => FinishPage(userScore: _scoreCount, totalScore: _quizNumber,))));
-          Navigator.pop(context);
-          _resetQuiz();
-        }
-      });
+  void _checkQuiz(flag, country){
+    setState(() {
+      _quizCount++;
+    });
+    print(_quizCount);
+    if (_quizCount != _quizNumber) {
+      if (flag == country){
+          print("correct");
+          _scoreCount++;
+      }else{
+          print("wrong");
+      }
+    } else{
+      _resetQuiz();
     }
+  }
+
+  List getList(int n, List source) {
+    return source.sample(n);
+  }
 
   void _resetQuiz() {
-      setState(() {
-        _scoreCount = 0;
-        _quizCount = 1;
-      });
+      _finalScore = _scoreCount;
+      Navigator.pop(context);
+      print(_finalScore);
+      print(_scoreCount);
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: ((context) => FinishPage(userScore: _finalScore, totalScore: _quizNumber,))));
     }
+  
+  @override
+  void initState(){
+    super.initState();
 
+    myFuture = getCountry();
+    _scoreCount = 0;
+    _quizCount = 0;
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(builder: (ctx, snapshot) {
       if (snapshot.hasData){
-          List data = snapshot.data;
+          List data = getList(4, snapshot.data);
           String randomCountryFlag = getRandomCountry(data)['flags']['png'];
           return Scaffold(
             body: SafeArea(
@@ -65,20 +81,26 @@ class _QuizDataState extends State<QuizData> {
                       style: const TextStyle(color: Colors.blue, fontSize: 25, fontWeight: FontWeight.bold),
                       ),
                   ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 40),
+                  ),
                   FadeInImage.assetNetwork(
                     placeholder: 'assets/Rolling.gif',
                     image: randomCountryFlag,
+                    height: 200,
                   ),
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 30, horizontal: 40),
                     child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: snapshot.data.map<Widget>((country){
+                      children: data.map<Widget>((country){
                           return Container(
                             margin: const EdgeInsets.only(top: 15),
                             height: 50,
                             child: ElevatedButton(
-                              onPressed: () => _nextQuiz(randomCountryFlag, country['flags']['png']),
+                              onPressed: () {
+                                _checkQuiz(randomCountryFlag, country['flags']['png']);
+                              },
                               child: Text(country['name']['common']),
                             ),
                           );
@@ -95,7 +117,7 @@ class _QuizDataState extends State<QuizData> {
           return Loading();
         }
     },
-      future: getCountry(),
+      future: myFuture,
     );
   }
 }
